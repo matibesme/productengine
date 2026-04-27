@@ -2,8 +2,9 @@ package com.api.productengine.service;
 
 
 import com.api.productengine.dto.OrderDTO;
-import com.api.productengine.exceptions.BadRequestException;
-import com.api.productengine.exceptions.ResourceNotFoundException;
+import com.api.productengine.exception.BadRequestException;
+import com.api.productengine.exception.OrderNotFoundException;
+import com.api.productengine.exception.ResourceNotFoundException;
 import com.api.productengine.model.Order;
 import com.api.productengine.model.Product;
 import com.api.productengine.repository.OrderRepository;
@@ -29,7 +30,7 @@ public class OrderService {
     @Transactional
     public Order create(OrderDTO orderDTO) {
         Product product = productRepository.findById(orderDTO.getProductId())
-                .orElseThrow(() -> new ResourceNotFoundException("El producto no existe."));
+                .orElseThrow(() ->  new OrderNotFoundException(orderDTO.getProductId()));
 
         if (product.getStock() <= 0) {
             throw new BadRequestException("Producto sin stock.");
@@ -52,13 +53,13 @@ public class OrderService {
 
     public Order findById(Long id) {
         return repository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
+                .orElseThrow(() -> new OrderNotFoundException(id));
     }
 
 
     public void delete(Long id) {
         if (!repository.existsById(id)) {
-            throw new ResourceNotFoundException("La orden no existe.");
+            throw new OrderNotFoundException(id);
         }
         repository.deleteById(id);
     }

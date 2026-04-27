@@ -1,4 +1,4 @@
-package com.api.productengine.exceptions;
+package com.api.productengine.exception;
 
 public class BadRequestException extends RuntimeException {
     public BadRequestException(String message) { super(message); }
