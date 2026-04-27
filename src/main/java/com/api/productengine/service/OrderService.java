@@ -8,6 +8,7 @@ import com.api.productengine.model.Order;
 import com.api.productengine.model.Product;
 import com.api.productengine.repository.OrderRepository;
 import com.api.productengine.repository.ProductRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -25,6 +26,7 @@ public class OrderService {
         this.productRepository = productRepository;
     }
 
+    @Transactional
     public Order create(OrderDTO orderDTO) {
         Product product = productRepository.findById(orderDTO.getProductId())
                 .orElseThrow(() -> new ResourceNotFoundException("El producto no existe."));
