@@ -7,6 +7,8 @@ import com.api.productengine.model.Product;
 import com.api.productengine.service.OrderService;
 import com.api.productengine.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,25 +24,27 @@ public class OrderController {
     }
 
     @PostMapping
-    public Order create(@RequestBody OrderDTO orderDTO) {
-        return service.create(orderDTO);
+    public ResponseEntity<Order> create(@RequestBody OrderDTO orderDTO) {
+        Order newOrder = service.create(orderDTO);
+        return new ResponseEntity<>(newOrder, HttpStatus.CREATED);
     }
 
     @GetMapping
-    public List<Order> getAll() {
-        System.out.println("exposed dta");
-        return service.findAll();
+    public ResponseEntity<List<Order>> getAll() {
+        List<Order> orders = service.findAll();
+        return ResponseEntity.ok(orders);
     }
 
     @GetMapping("/{id}")
-    public Order getById(@PathVariable Long id) {
-        return service.findById(id);
+    public ResponseEntity<Order> getById(@PathVariable Long id) {
+        Order order = service.findById(id);
+        return ResponseEntity.ok(order);
     }
 
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
-        service.delete(id);
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        return ResponseEntity.noContent().build();
     }
 
 }
